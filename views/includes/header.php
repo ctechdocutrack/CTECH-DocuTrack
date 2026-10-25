@@ -1,3 +1,11 @@
+<?php 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+include '../config/dbconn.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,11 +18,5 @@
 </head>
 <body>
 
-<?php 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 
-include '../config/dbconn.php';
-?>
     
