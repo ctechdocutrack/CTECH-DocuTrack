@@ -1,15 +1,15 @@
 
 <?php
-include 'includes/header.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
 
-// $sql = "SELECT * FROM users WHERE user_id = {$_SESSION['user_id']} LIMIT 1";
-// $sql_run = mysqli_query($conn, $sql);
-// $user = mysqli_fetch_assoc($sql_run);
+include 'includes/header.php';
 
 $user_id = (int) $_SESSION['user_id'];
 

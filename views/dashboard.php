@@ -1,6 +1,9 @@
 
 <?php
-include 'includes/header.php';
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -14,6 +17,8 @@ if (!isset($_SESSION['cache']) || !is_array($_SESSION['cache'])) {
     header("Location: login.php");
     exit;
 }
+
+include 'includes/header.php';
 
 $user_id = (int) $_SESSION['user_id'];
 
