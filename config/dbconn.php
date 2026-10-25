@@ -8,7 +8,7 @@ $password = "CHOXxHxYCB1jUfiW";
 $dbname = "ctech_docutrack";
 $port = 4000;
 
-$caCert = __DIR__ . "\isrgrootx1.pem";
+$caCert = __DIR__ . "/isrgrootx1.pem";
 
 try {
     if (!is_readable($caCert)) {
