@@ -1,1 +1,1 @@
-<?php header("Location:views/dashboard.php");?>
+<?php header("Location:views/login.php");?>

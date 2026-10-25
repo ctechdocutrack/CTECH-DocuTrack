@@ -56,7 +56,7 @@
                             </div>
                         </div>
                         <!-- Category -->
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-md-4">
                             <label for="documentCategory" class="form-label fw-semibold">
                                 Category <span class="text-danger">*</span>
                             </label>
@@ -64,18 +64,18 @@
                                 <option value="" selected disabled>
                                     Select category
                                 </option>
-                                <option value="MEMORANDUM">Memorandum</option>
-                                <option value="SPECIAL ORDER">Special Order</option>
-                                <option value="RECEIVING COPY">Receiving Copy</option>
-                                <option value="GRADESHEET">Gradesheet</option>
                                 <option value="CLASS RECORD">Class Record</option>
-                                <option value="TABLE OF SPECIFICATIONS">
-                                    Table of Specifications
-                                </option>
+                                <option value="GRADESHEET">Gradesheet</option>
+                                <option value="MEMORANDUM">Memorandum</option>
+                                <option value="MEMORANDUM OF AGREEMENT">Memorandum of Agreement</option>
+                                <option value="OPERATIONAL PLAN">Operational Plan</option>
+                                <option value="RECEIVING COPY">Receiving Copy</option>
+                                <option value="SPECIAL ORDER">Special Order</option>
+                                <option value="TABLE OF SPECIFICATIONS">Table of Specifications</option>
                             </select>
                         </div>
                         <!-- Document Type -->
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-md-4">
                             <label for="documentType" class="form-label fw-semibold">
                                 Document Type <span class="text-danger">*</span>
                             </label>
@@ -84,8 +84,23 @@
                                 <option value="Outgoing">Outgoing</option>
                             </select>
                         </div>
+         
+                        <!-- Year -->
+                        <div class="col-12 col-md-4">
+                            <label for="documentYear" class="form-label fw-semibold">
+                                Year <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select" id="documentYear" name="year" required>
+                                <?php
+                                $currentYear = (int) date('Y');
 
-                        
+                                for ($year = $currentYear; $year >= 2020; $year--) {
+                                    echo '<option value="' . $year . '">' . $year . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+  
                         <hr class="my-4">
 
                         <!-- Attachment Section -->
@@ -137,6 +152,7 @@
                                         No photo selected
                                     </span>
                                     <input type="file" class="form-control mt-2" id="camera_file" name="camera_file" accept="image/*" capture="environment" hidden>
+
                                 </div>
                             </div>
                         </div>
@@ -219,3 +235,4 @@ function escapeHtml(value) {
     });
 }
 </script>
+

@@ -9,4 +9,10 @@
     <link rel="stylesheet" href="/CTECH%20DocuTrack/node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
 </head>
 <body>
+
+<?php 
+session_start(); 
+
+include '../config/dbconn.php';
+?>
     

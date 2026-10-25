@@ -1,7 +1,31 @@
 
 <?php
 include 'includes/header.php';
-include '../config/dbconn.php';
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
+if (!isset($_SESSION['cache']) || !is_array($_SESSION['cache'])) {
+    $_SESSION = [];
+    session_destroy();
+
+    header("Location: login.php");
+    exit;
+}
+
+$user_id = (int) $_SESSION['user_id'];
+
+$users = $_SESSION['cache']['users'] ?? [];
+$user = [];
+
+while ($row = array_shift($users)) {
+    if ((int) $row['user_id'] === $user_id) {
+        $user = $row;
+        break;
+    }
+}
 ?>
 
 <div class="container-fluid bg-light min-vh-100">
@@ -15,7 +39,7 @@ include '../config/dbconn.php';
             <!-- Page Header -->
             <div class="d-flex flex-column flex-sm-row
                         justify-content-between align-items-sm-center
-                        gap-3 mb-4">
+                        gap-3 mb-3">
 
                 <div>
                     <nav aria-label="breadcrumb">
@@ -42,6 +66,7 @@ include '../config/dbconn.php';
                     </p>
                 </div>
 
+                <?php if ($user['role'] === 'admin'): ?>
                 <div class="d-flex flex-wrap gap-2">
                     <button type="button"
                             class="btn btn-primary rounded-3 px-3 py-2"
@@ -51,6 +76,7 @@ include '../config/dbconn.php';
                         Add Document
                     </button>
                 </div>
+                <?php endif; ?>
 
             </div>
 
@@ -61,12 +87,12 @@ include '../config/dbconn.php';
             </div>
 
             <!-- Statistics Cards -->
-            <div class="row g-3 mb-4">
+            <div class="row g-3 mb-3">
 
                 <!-- Total Documents -->
                 <div class="col-12 col-sm-6 col-xl-3">
                     <div class="card border-0 shadow-sm h-100 rounded-4">
-                        <div class="card-body p-4">
+                        <div class="card-body p-3">
 
                             <div class="d-flex justify-content-between
                                         align-items-start mb-3">
@@ -98,7 +124,7 @@ include '../config/dbconn.php';
                 <!-- Incoming Documents -->
                 <div class="col-12 col-sm-6 col-xl-3">
                     <div class="card border-0 shadow-sm h-100 rounded-4">
-                        <div class="card-body p-4">
+                        <div class="card-body p-3">
 
                             <div class="d-flex justify-content-between
                                         align-items-start mb-3">
@@ -130,7 +156,7 @@ include '../config/dbconn.php';
                 <!-- Pending Documents -->
                 <div class="col-12 col-sm-6 col-xl-3">
                     <div class="card border-0 shadow-sm h-100 rounded-4">
-                        <div class="card-body p-4">
+                        <div class="card-body p-3">
 
                             <div class="d-flex justify-content-between
                                         align-items-start mb-3">
@@ -162,7 +188,7 @@ include '../config/dbconn.php';
                 <!-- Archived Documents -->
                 <div class="col-12 col-sm-6 col-xl-3">
                     <div class="card border-0 shadow-sm h-100 rounded-4">
-                        <div class="card-body p-4">
+                        <div class="card-body p-3">
 
                             <div class="d-flex justify-content-between
                                         align-items-start mb-3">
@@ -197,7 +223,7 @@ include '../config/dbconn.php';
             <div class="card border-0 shadow-sm rounded-4">
 
                 <!-- Table Header -->
-                <div class="card-header bg-white border-0 p-3 p-lg-4">
+                <div class="card-header bg-white border-0 p-3 p-lg-3">
 
                     <div class="d-flex flex-column flex-lg-row
                                 justify-content-between align-items-lg-center
@@ -221,151 +247,72 @@ include '../config/dbconn.php';
                 <div class="card-body p-0">
 
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0"
+                        <table class="table table-hover table-bordered align-middle mb-0"
                                id="recentDocumentsTable">
 
                             <thead class="table-light">
-                                <tr>
-                                    <th class="px-3 px-lg-4 py-3">
-                                        Reference No.
-                                    </th>
-
-                                    <th class="py-3">
-                                        Document
-                                    </th>
-
-                                    <th class="py-3">
-                                        Category
-                                    </th>
-
-                                    <th class="py-3">
-                                        Type
-                                    </th>
-
-                                    <th class="py-3">
-                                        Status
-                                    </th>
-
-                                    <th class="text-center py-3">
-                                        Action
-                                    </th>
+                                <tr class="">
+                                    <th class="py-3" style="width: 22%;">Document Title</th>
+                                    <th class="py-3" style="width: 30%;">Description</th>
+                                    <th class="py-3" style="width: 16%;">Category</th>
+                                    <th class="py-3" style="width: 10%;">Year</th>
+                                    <th class="py-3" style="width: 14%;">Type</th>
+                                    <th class="text-center py-3" style="width: 18%;">Action</th>
                                 </tr>
                             </thead>
-
                             <tbody>
 
+                            <?php 
+                            $documents = $_SESSION['cache']['documents'] ?? [];
+
+                            while ($row = array_shift($documents)) {
+                                $documents_id = htmlspecialchars($row['documents_id'], ENT_QUOTES, 'UTF-8');
+                                $title = htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8');
+                                $description = htmlspecialchars($row['description'], ENT_QUOTES, 'UTF-8');
+                                $category = htmlspecialchars($row['category'], ENT_QUOTES, 'UTF-8');
+                                $year = htmlspecialchars($row['year'], ENT_QUOTES, 'UTF-8');
+                                $type = htmlspecialchars($row['type'], ENT_QUOTES, 'UTF-8');
+
+                                echo "
                                 <tr>
-                                    <td class="px-3 px-lg-4">
-                                        <span class="fw-semibold text-primary">
-                                            CTECH-001
-                                        </span>
-                                    </td>
-
                                     <td>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="bg-primary bg-opacity-10
-                                                        text-primary rounded-3 p-2">
-                                                <i class="bi bi-file-earmark-text
-                                                          fs-5"></i>
+                                        <div class='d-flex align-items-center gap-3'>
+                                            <div class='bg-primary bg-opacity-10
+                                                        text-primary rounded-3 p-2'>
+                                                <i class='bi bi-file-earmark-text fs-4'></i>
                                             </div>
-
                                             <div>
-                                                <div class="fw-semibold text-dark">
-                                                    Office Memorandum
+                                                <div class='fw-semibold'>
+                                                    $title
                                                 </div>
-                                                <small class="text-secondary">
-                                                    Document record
-                                                </small>
                                             </div>
                                         </div>
                                     </td>
-
                                     <td>
-                                        <span class="badge bg-light text-dark border">
-                                            Memorandum
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="text-secondary small">
-                                            Incoming
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <span class="badge rounded-pill
-                                                     text-bg-success">
-                                            <i class="bi bi-check-circle me-1"></i>
-                                            Archived
-                                        </span>
-                                    </td>
-
-                                    <td class="text-center">
-                                        <button type="button"
-                                                class="btn btn-light btn-sm border"
-                                                title="View document"
-                                                aria-label="View CTECH-001">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td class="px-3 px-lg-4">
-                                        <span class="fw-semibold text-primary">
-                                            CTECH-002
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="bg-warning bg-opacity-10
-                                                        text-warning rounded-3 p-2">
-                                                <i class="bi bi-file-earmark-bar-graph
-                                                          fs-5"></i>
-                                            </div>
-
-                                            <div>
-                                                <div class="fw-semibold text-dark">
-                                                    Equipment Report
-                                                </div>
-                                                <small class="text-secondary">
-                                                    Document record
-                                                </small>
-                                            </div>
+                                        <div style=' display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; line-height: 1.5;
+                                        ' title='$description'>
+                                            $description
                                         </div>
                                     </td>
-
                                     <td>
-                                        <span class="badge bg-light text-dark border">
-                                            Special Order
-                                        </span>
+                                        $category
                                     </td>
-
                                     <td>
-                                        <span class="text-secondary small">
-                                            Outgoing
-                                        </span>
+                                        $year
                                     </td>
-
                                     <td>
-                                        <span class="badge rounded-pill
-                                                     text-bg-warning">
-                                            <i class="bi bi-clock me-1"></i>
-                                            Pending
-                                        </span>
+                                        $type
                                     </td>
-
-                                    <td class="text-center">
-                                        <button type="button"
-                                                class="btn btn-light btn-sm border"
-                                                title="View document"
-                                                aria-label="View CTECH-002">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
+                                    <td class='text-center'>
+                                        <a href='view_document.php?documents_id=$documents_id'
+                                        class='btn btn-outline-primary btn-sm'>
+                                            <i class='bi bi-eye me-1'></i>
+                                        </a>
                                     </td>
-                                </tr>
+                                </tr>";
 
+                            }
+                            ?>
                             </tbody>
                         </table>
                     </div>
@@ -395,4 +342,6 @@ include '../config/dbconn.php';
 
 <!-- Add Document Modal -->
 <?php include 'modals/addDocumentModal.php'; ?>
+<?php include 'includes/jquery_scripts.php'; ?>
+<script src="/CTECH DocuTrack/assets/js/dashboard.js"></script>
 <?php include 'includes/footer.php'; ?>

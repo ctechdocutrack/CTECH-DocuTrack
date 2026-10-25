@@ -8,7 +8,6 @@ $password = "CHOXxHxYCB1jUfiW";
 $dbname = "ctech_docutrack";
 $port = 4000;
 
-// Certificate is inside the config folder
 $caCert = __DIR__ . "\isrgrootx1.pem";
 
 try {
@@ -22,16 +21,19 @@ try {
 
     mysqli_options($conn,MYSQLI_OPT_SSL_VERIFY_SERVER_CERT,true);
     mysqli_ssl_set($conn,null,null,$caCert,null,null);
+    mysqli_report(MYSQLI_REPORT_OFF);
 
-    $conn->real_connect($host,$username,$password,$dbname,$port,null,MYSQLI_CLIENT_SSL);
+    $connected = @$conn->real_connect($host,$username,$password,$dbname,$port,null,MYSQLI_CLIENT_SSL);
+    if (!$connected) {
+        throw new RuntimeException("TiDB connection failed.");
+    }
     $conn->set_charset("utf8mb4");
 
 } catch (Throwable $e) {
     error_log("TiDB connection error: " . $e->getMessage());
 
-    die(
-        "Database connection failed: " .
-        htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8')
-    );
+    require __DIR__ . '/../assets/error_connection.php';
+
+    exit;
 }
 ?>

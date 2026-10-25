@@ -10,96 +10,87 @@
             <div class="text-secondary small">DocuTrack</div>
         </div>
     </div>
-
-    <button
-        class="btn btn-light border rounded-3"
-        type="button"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#mobileSidebar"
-        aria-controls="mobileSidebar"
-        aria-label="Open navigation"
-    >
+    <button class="btn btn-light border rounded-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar" aria-label="Open navigation">
         <i class="bi bi-list fs-4"></i>
     </button>
 </nav>
 
 <!-- Desktop Sidebar -->
-<aside class="d-none d-md-flex flex-column col-md-3 col-lg-2 bg-dark text-white vh-100 p-3">
-
+<aside class="d-none d-md-flex flex-column col-md-3 col-lg-2 bg-dark text-white vh-100 p-3 overflow-hidden sticky-top" style="top: 0;">
     <!-- Brand -->
     <a href="dashboard.php"
        class="text-decoration-none text-white d-flex align-items-center gap-3 p-2 mb-4">
         <div class="bg-primary rounded-3 p-3">
             <i class="bi bi-layers-fill fs-4"></i>
         </div>
-
         <div>
             <h5 class="fw-bold mb-0">CTECH</h5>
             <small class="text-white-50">DocuTrack System</small>
         </div>
     </a>
-
     <!-- Section Label -->
     <div class="text-uppercase text-white-50 small fw-semibold px-3 mb-2">
         Main Menu
     </div>
-
     <!-- Navigation -->
     <nav class="nav flex-column gap-2">
-
         <a href="dashboard.php"
            class="nav-link active bg-primary text-white rounded-3 px-3 py-3">
-            <i class="bi bi-grid-1x2-fill me-3"></i>
-            Dashboard
+            <i class="bi bi-grid-1x2-fill me-3"></i> Dashboard
         </a>
-
         <a href="documents.php"
            class="nav-link text-white-50 rounded-3 px-3 py-3">
-            <i class="bi bi-folder2-open me-3"></i>
-            Documents
+            <i class="bi bi-folder2-open me-3"></i> Documents
         </a>
-
-        <a href="incoming.php"
+        <?php if ($user['role'] === 'admin'): ?>
+        <a href="users.php"
+            class="nav-link text-white-50 rounded-3 px-3 py-3">
+            <i class="bi bi-person me-3"></i> Users
+        </a>
+        <?php endif; ?>
+        <!-- <a href="incoming.php"
            class="nav-link text-white-50 rounded-3 px-3 py-3">
-            <i class="bi bi-inbox-fill me-3"></i>
-            Incoming Files
-            <span class="badge bg-primary rounded-pill ms-2">New</span>
+            <i class="bi bi-inbox-fill me-3"></i> Incoming Files
         </a>
-
         <a href="tracking.php"
            class="nav-link text-white-50 rounded-3 px-3 py-3">
-            <i class="bi bi-arrow-left-right me-3"></i>
-            Document Tracking
+            <i class="bi bi-arrow-left-right me-3"></i> Document Tracking
         </a>
-
         <a href="reports.php"
            class="nav-link text-white-50 rounded-3 px-3 py-3">
-            <i class="bi bi-bar-chart-line me-3"></i>
-            Reports
-        </a>
+            <i class="bi bi-bar-chart-line me-3"></i> Reports
+        </a> -->
     </nav>
-
     <!-- Bottom Profile -->
     <div class="mt-auto pt-4">
         <hr class="border-secondary">
-
         <div class="d-flex align-items-center gap-3 p-2">
-            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center"
-                 style="width: 42px; height: 42px;">
-                <i class="bi bi-person-fill fs-5"></i>
-            </div>
+            <!-- Profile Dropdown -->
+            <div class="dropdown">
+                <button class="btn bg-primary text-white rounded-circle d-flex align-items-center justify-content-center p-0" style="width: 42px; height: 42px;" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Profile options">
+                    <i class="bi bi-person-fill fs-5"></i>
+                </button>
 
+                <ul class="dropdown-menu dropdown-menu-dark bg-dark dropdown-menu-end shadow border border-secondary rounded-3 p-2 mb-4">
+                    <li>
+                        <h6 class="dropdown-header text-uppercase small text-white">Account Settings</h6>
+                    </li>
+                    <li>
+                        <a class="dropdown-item text-white rounded-2 py-2" href="profile.php">
+                            <i class="bi bi-person-gear me-2"></i> Edit Profile
+                        </a>
+                    </li>
+                </ul>
+            </div>
             <div class="flex-grow-1 overflow-hidden">
                 <div class="fw-semibold text-white text-truncate">
-                    Administrator
+                    <?= htmlspecialchars($user['username'], ENT_QUOTES, 'UTF-8') ?>
                 </div>
-                <small class="text-white-50">System Admin</small>
+                <small class="text-white-50 text-uppercase">
+                    <?= htmlspecialchars($user['role'], ENT_QUOTES, 'UTF-8') ?>
+                </small>
             </div>
-
-            <a href="logout.php"
-               class="text-white-50"
-               title="Logout"
-               aria-label="Logout">
+            <a href="../controller/logoutController.php" class="text-white-50" title="Logout" aria-label="Logout">
                 <i class="bi bi-box-arrow-right fs-5"></i>
             </a>
         </div>
@@ -107,80 +98,66 @@
 </aside>
 
 <!-- Mobile Sidebar -->
-<div class="offcanvas offcanvas-start text-bg-dark"
-     tabindex="-1"
-     id="mobileSidebar"
-     aria-labelledby="mobileSidebarLabel">
-
+<div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
     <div class="offcanvas-header border-bottom border-secondary py-4">
         <div class="d-flex align-items-center gap-3">
             <div class="bg-primary rounded-3 p-3">
                 <i class="bi bi-layers-fill fs-4"></i>
             </div>
-
             <div>
                 <h5 class="fw-bold mb-0" id="mobileSidebarLabel">CTECH</h5>
                 <small class="text-white-50">DocuTrack System</small>
             </div>
         </div>
-
-        <button type="button"
-                class="btn-close btn-close-white"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-
     <div class="offcanvas-body d-flex flex-column p-3">
-
-        <div class="text-uppercase text-white-50 small fw-semibold px-3 mb-3">
-            Main Menu
-        </div>
-
+        <div class="text-uppercase text-white-50 small fw-semibold px-3 mb-3"> Main Menu</div>
         <nav class="nav flex-column gap-2">
-
-            <a href="dashboard.php"
-               class="nav-link active bg-primary text-white rounded-3 px-3 py-3">
+            <a href="dashboard.php" class="nav-link active bg-primary text-white rounded-3 px-3 py-3">
                 <i class="bi bi-grid-1x2-fill me-3"></i>Dashboard
             </a>
-
-            <a href="documents.php"
-               class="nav-link text-white-50 rounded-3 px-3 py-3">
+            <a href="documents.php" class="nav-link text-white-50 rounded-3 px-3 py-3">
                 <i class="bi bi-folder2-open me-3"></i>Documents
             </a>
-
-            <a href="incoming.php"
-               class="nav-link text-white-50 rounded-3 px-3 py-3">
+            <!-- <a href="incoming.php" class="nav-link text-white-50 rounded-3 px-3 py-3">
                 <i class="bi bi-inbox-fill me-3"></i>Incoming Files
             </a>
-
-            <a href="tracking.php"
-               class="nav-link text-white-50 rounded-3 px-3 py-3">
+            <a href="tracking.php" class="nav-link text-white-50 rounded-3 px-3 py-3">
                 <i class="bi bi-arrow-left-right me-3"></i>Document Tracking
             </a>
-
-            <a href="reports.php"
-               class="nav-link text-white-50 rounded-3 px-3 py-3">
+            <a href="reports.php" class="nav-link text-white-50 rounded-3 px-3 py-3">
                 <i class="bi bi-bar-chart-line me-3"></i>Reports
-            </a>
+            </a> -->
         </nav>
-
         <div class="mt-auto pt-4">
             <hr class="border-secondary">
+                <div class="d-flex align-items-center gap-3 p-2">
+                    <div class="dropdown">
+                    <button class="btn bg-primary text-white rounded-circle d-flex align-items-center justify-content-center p-0" style="width: 42px; height: 42px;" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Profile options">
+                        <i class="bi bi-person-fill fs-5"></i>
+                    </button>
 
-            <div class="d-flex align-items-center gap-3 p-2">
-                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center"
-                     style="width: 42px; height: 42px;">
-                    <i class="bi bi-person-fill fs-5"></i>
+                    <ul class="dropdown-menu dropdown-menu-dark bg-dark dropdown-menu-end shadow border border-secondary rounded-3 p-2 mb-4">
+                        <li>
+                            <h6 class="dropdown-header text-uppercase small text-white">Account Settings</h6>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-white rounded-2 py-2" href="profile.php">
+                                <i class="bi bi-person-gear me-2"></i> Edit Profile
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-
                 <div class="flex-grow-1">
-                    <div class="fw-semibold">Administrator</div>
-                    <small class="text-white-50">System Admin</small>
+                    <div class="fw-semibold text-uppercase">
+                        <?= htmlspecialchars($user['username'], ENT_QUOTES, 'UTF-8') ?>
+                    </div>
+                    <small class="text-white-50">
+                        <?= htmlspecialchars($user['role'], ENT_QUOTES, 'UTF-8') ?>
+                    </small>
                 </div>
-
-                <a href="logout.php"
-                   class="text-white-50"
-                   aria-label="Logout">
+                <a href="../controller/logoutController.php" class="text-white-50" aria-label="Logout">
                     <i class="bi bi-box-arrow-right fs-5"></i>
                 </a>
             </div>

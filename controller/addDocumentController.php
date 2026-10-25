@@ -6,11 +6,9 @@ if (isset($_POST['add_document'])) {
     $title       = mysqli_real_escape_string($conn, trim($_POST['title'] ?? ''));
     $description = mysqli_real_escape_string($conn, trim($_POST['description'] ?? ''));
     $category    = mysqli_real_escape_string($conn, trim($_POST['category'] ?? ''));
+    $year        = mysqli_real_escape_string($conn, trim($_POST['year'] ?? ''));
     $type        = mysqli_real_escape_string($conn, trim($_POST['type'] ?? ''));
 
-    // if ($title === '' || $category === '' || $type === '') {
-    //     die('Please complete all required fields.');
-    // }
     $uploadDir = '../uploads/documents/';
 
     if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true)) {
@@ -72,8 +70,8 @@ if (isset($_POST['add_document'])) {
     }
 
     // Step 1: Insert document first to generate documents_id
-    $sql = "INSERT INTO documents (title, description, category, type, pdf_file, camera_file)
-            VALUES ('$title', '$description', '$category', '$type', NULL, NULL)";
+    $sql = "INSERT INTO documents (title, description, category, type, pdf_file, camera_file, year)
+            VALUES ('$title', '$description', '$category', '$type', NULL, NULL, '$year')";
 
     if (!mysqli_query($conn, $sql)) {
         die('Database error: ' . mysqli_error($conn));
