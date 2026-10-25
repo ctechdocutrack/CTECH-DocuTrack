@@ -81,6 +81,6 @@ if (isset($_SESSION['user_id'])) {
     </div>
 </div>
 
-<script src="/CTECH DocuTrack/assets/js/login.js"></script>
+<script src="../assets/js/login.js"></script>
 
 <?php include 'includes/footer.php'; ?>

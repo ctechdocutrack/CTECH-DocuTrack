@@ -346,5 +346,5 @@ while ($row = array_shift($users)) {
 <!-- Add Document Modal -->
 <?php include 'modals/addDocumentModal.php'; ?>
 <?php include 'includes/jquery_scripts.php'; ?>
-<script src="/CTECH DocuTrack/assets/js/dashboard.js"></script>
+<script src="../assets/js/dashboard.js"></script>
 <?php include 'includes/footer.php'; ?>
