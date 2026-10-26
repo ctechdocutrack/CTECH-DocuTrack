@@ -8,6 +8,14 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+if (!isset($_SESSION['cache']) || !is_array($_SESSION['cache'])) {
+    $_SESSION = [];
+    session_destroy();
+
+    header("Location: login.php");
+    exit;
+}
+
 include 'includes/header.php';
 
 $user_id = (int) $_SESSION['user_id'];
@@ -226,7 +234,7 @@ $documents = $filteredDocuments;
                     <div class="card-body p-3 p-lg-4">
 
                         <div class="table-responsive">
-                            <table class="table table-hover table-bordered align-middle">
+                            <table class="table table-hover table-bordered align-middle" id="documentsTable">
 
                                 <thead class="table-light">
                                     <tr>
@@ -296,4 +304,6 @@ $documents = $filteredDocuments;
 
 <!-- Add Document Modal -->
 <?php include 'modals/addDocumentModal.php'; ?>
+<?php include 'includes/jquery_scripts.php'; ?>
+<script src="../assets/js/documents.js"></script>
 <?php include 'includes/footer.php'; ?>

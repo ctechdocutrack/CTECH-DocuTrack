@@ -1,3 +1,12 @@
+<?php
+$current_page = basename($_SERVER['PHP_SELF']);
+
+function navActive($page, $current_page) {
+    return $page === $current_page
+        ? 'active bg-primary text-white'
+        : 'text-white-50';
+}
+?>
 
 <!-- Mobile Top Navbar -->
 <nav class="navbar bg-white border-bottom px-3 py-3 d-md-none">
@@ -35,31 +44,24 @@
     <!-- Navigation -->
     <nav class="nav flex-column gap-2">
         <a href="dashboard.php"
-           class="nav-link active bg-primary text-white rounded-3 px-3 py-3">
+        class="nav-link <?= navActive('dashboard.php', $current_page) ?> rounded-3 px-3 py-3">
             <i class="bi bi-grid-1x2-fill me-3"></i> Dashboard
         </a>
         <a href="documents.php"
-           class="nav-link text-white-50 rounded-3 px-3 py-3">
+        class="nav-link <?= navActive('documents.php', $current_page) ?> rounded-3 px-3 py-3">
             <i class="bi bi-folder2-open me-3"></i> Documents
         </a>
-        <?php if ($user['role'] === 'admin'): ?>
-        <a href="users.php"
-            class="nav-link text-white-50 rounded-3 px-3 py-3">
-            <i class="bi bi-person me-3"></i> Users
-        </a>
+        <?php if (strtolower(trim($user['role'] ?? '')) === 'admin'): ?>
+            <a href="users.php"
+            class="nav-link <?= navActive('users.php', $current_page) ?> rounded-3 px-3 py-3">
+                <i class="bi bi-person me-3"></i> Users
+            </a>
+
+            <a href="activity_logs.php"
+            class="nav-link <?= navActive('activity_logs.php', $current_page) ?> rounded-3 px-3 py-3">
+                <i class="bi bi-clock-history me-3"></i> Activity Log
+            </a>
         <?php endif; ?>
-        <!-- <a href="incoming.php"
-           class="nav-link text-white-50 rounded-3 px-3 py-3">
-            <i class="bi bi-inbox-fill me-3"></i> Incoming Files
-        </a>
-        <a href="tracking.php"
-           class="nav-link text-white-50 rounded-3 px-3 py-3">
-            <i class="bi bi-arrow-left-right me-3"></i> Document Tracking
-        </a>
-        <a href="reports.php"
-           class="nav-link text-white-50 rounded-3 px-3 py-3">
-            <i class="bi bi-bar-chart-line me-3"></i> Reports
-        </a> -->
     </nav>
     <!-- Bottom Profile -->
     <div class="mt-auto pt-4">
@@ -114,21 +116,25 @@
     <div class="offcanvas-body d-flex flex-column p-3">
         <div class="text-uppercase text-white-50 small fw-semibold px-3 mb-3"> Main Menu</div>
         <nav class="nav flex-column gap-2">
-            <a href="dashboard.php" class="nav-link active bg-primary text-white rounded-3 px-3 py-3">
-                <i class="bi bi-grid-1x2-fill me-3"></i>Dashboard
+            <a href="dashboard.php"
+            class="nav-link <?= navActive('dashboard.php', $current_page) ?> rounded-3 px-3 py-3">
+                <i class="bi bi-grid-1x2-fill me-3"></i> Dashboard
             </a>
-            <a href="documents.php" class="nav-link text-white-50 rounded-3 px-3 py-3">
-                <i class="bi bi-folder2-open me-3"></i>Documents
+            <a href="documents.php"
+            class="nav-link <?= navActive('documents.php', $current_page) ?> rounded-3 px-3 py-3">
+                <i class="bi bi-folder2-open me-3"></i> Documents
             </a>
-            <!-- <a href="incoming.php" class="nav-link text-white-50 rounded-3 px-3 py-3">
-                <i class="bi bi-inbox-fill me-3"></i>Incoming Files
-            </a>
-            <a href="tracking.php" class="nav-link text-white-50 rounded-3 px-3 py-3">
-                <i class="bi bi-arrow-left-right me-3"></i>Document Tracking
-            </a>
-            <a href="reports.php" class="nav-link text-white-50 rounded-3 px-3 py-3">
-                <i class="bi bi-bar-chart-line me-3"></i>Reports
-            </a> -->
+            <?php if (strtolower(trim($user['role'] ?? '')) === 'admin'): ?>
+                <a href="users.php"
+                class="nav-link <?= navActive('users.php', $current_page) ?> rounded-3 px-3 py-3">
+                    <i class="bi bi-person me-3"></i> Users
+                </a>
+
+                <a href="activity_logs.php"
+                class="nav-link <?= navActive('activity_logs.php', $current_page) ?> rounded-3 px-3 py-3">
+                    <i class="bi bi-clock-history me-3"></i> Activity Log
+                </a>
+            <?php endif; ?>
         </nav>
         <div class="mt-auto pt-4">
             <hr class="border-secondary">

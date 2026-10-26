@@ -3,6 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 include_once '../config/dbconn.php';
+require_once __DIR__ . '/activityLogsController.php';
 
 if(isset($_POST['login'])) {
     $username = mysqli_real_escape_string($conn, trim($_POST['username'] ?? ''));
@@ -53,7 +54,13 @@ if(isset($_POST['login'])) {
                 mysqli_free_result($tables_result);
             }
             $_SESSION['cache_loaded_at'] = time();
-
+            logActivity(
+                $_SESSION['user_id'],
+                $user['username'],
+                'Login',
+                'Account logged in successfully.',
+                'Success'
+            );
             header("Location: ../views/dashboard.php");
             exit;
         } else {

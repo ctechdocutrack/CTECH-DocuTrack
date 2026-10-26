@@ -3,6 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 include '../config/dbconn.php';
+require_once __DIR__ . '/activityLogsController.php';
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../views/login.php");
@@ -30,6 +31,16 @@ if (isset($_POST['add_faculty'])) {
         $sql_run = mysqli_query($conn, $sql);
 
         if ($sql_run) {
+            $new_user_id = mysqli_insert_id($conn);
+            $actor_username = $_SESSION['username'] ?? 'Unknown';
+
+            logActivity(
+                $_SESSION['user_id'],
+                $actor_username,
+                'Add User',
+                'Created a ' . $role . ' account for ' . trim($_POST['username'] ?? ''),
+                'Success'
+            );
             header("Location: ../views/profile.php?account=created");
             exit;
         }else {

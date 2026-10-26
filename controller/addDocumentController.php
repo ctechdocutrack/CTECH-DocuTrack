@@ -1,5 +1,9 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 include_once '../config/dbconn.php';
+require_once __DIR__ . '/activityLogsController.php';
 
 if (isset($_POST['add_document'])) {
     $title       = mysqli_real_escape_string($conn, trim($_POST['title'] ?? ''));
@@ -134,6 +138,15 @@ if (isset($_POST['add_document'])) {
                   SET pdf_file = $pdfValue, camera_file = $cameraValue
                   WHERE documents_id = $documents_id";
     if (mysqli_query($conn, $updateSql)) {
+         $username = $_SESSION['username'] ?? 'Unknown';
+
+        logActivity(
+            $_SESSION['user_id'],
+            $username,
+            'Add Document',
+            'Added a new document: ' . trim($_POST['title'] ?? ''),
+            'Success'
+        );
         header("Location: ../views/dashboard.php");
         exit;
     } else {

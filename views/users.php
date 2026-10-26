@@ -8,24 +8,42 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-include 'includes/header.php';
+if (!isset($_SESSION['cache']) || !is_array($_SESSION['cache'])) {
+    $_SESSION = [];
+    session_destroy();
 
-$user_id = (int) $_SESSION['user_id'];
-
-$sql = "SELECT * FROM users WHERE user_id = $user_id LIMIT 1";
-$sql_run = mysqli_query($conn, $sql);
-$user = mysqli_fetch_assoc($sql_run);
-
-if (!$user) {
     header("Location: login.php");
     exit;
 }
 
-// Only admins can access the Users page
-if (strtolower(trim($user['role'] ?? '')) !== 'admin') {
-    header("Location: dashboard.php");
-    exit;
+include 'includes/header.php';
+
+// $sql = "SELECT * FROM users WHERE user_id = $user_id LIMIT 1";
+// $sql_run = mysqli_query($conn, $sql);
+// $user = mysqli_fetch_assoc($sql_run);
+
+// if (!$user) {
+//     header("Location: login.php");
+//     exit;
+// }
+
+$user_id = (int) $_SESSION['user_id'];
+
+$users = $_SESSION['cache']['users'] ?? [];
+$user = [];
+
+while ($row = array_shift($users)) {
+    if ((int) $row['user_id'] === $user_id) {
+        $user = $row;
+        break;
+    }
 }
+
+// Only admins can access the Users page
+// if (strtolower(trim($user['role'] ?? '')) !== 'admin') {
+//     header("Location: dashboard.php");
+//     exit;
+// }
 ?>
 
 <div class="container-fluid bg-light min-vh-100">
@@ -51,14 +69,32 @@ if (strtolower(trim($user['role'] ?? '')) !== 'admin') {
                     </ol>
                 </nav>
 
-                <h2 class="fw-bold text-dark mb-1">
-                    <i class="bi bi-people text-primary me-2"></i>
-                    Users
-                </h2>
+                
+                <div class="col-12">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                        <div>
+                            <h2 class="fw-bold text-dark mb-1">
+                                Users
+                            </h2>
 
-                <p class="text-secondary mb-0">
-                    View all registered user accounts and their roles.
-                </p>
+                            <p class="text-secondary mb-0">
+                                View all registered user accounts and their roles.
+                            </p>
+                        </div>
+
+                        <?php if (strtolower(trim($user['role'] ?? '')) === 'admin'): ?>
+                            <button type="button"
+                                    class="btn btn-success rounded-3 px-3"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#addFacultyModal">
+                                <i class="bi bi-person-plus me-2"></i>
+                                Add User Account
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                
             </div>
 
             <!-- All Users Table -->
@@ -78,9 +114,7 @@ if (strtolower(trim($user['role'] ?? '')) !== 'admin') {
                 <div class="card-body p-0">
                     <div class="table-responsive">
 
-                        <table class="table table-hover table-bordered
-                                      align-middle mb-0"
-                               id="usersTable">
+                        <table class="table table-hover table-bordered align-middle mb-0" id="usersTable">
 
                             <thead class="table-light">
                                 <tr>
@@ -94,105 +128,57 @@ if (strtolower(trim($user['role'] ?? '')) !== 'admin') {
 
                             <tbody>
                                 <?php
-                                $users_sql = "SELECT user_id, full_name,
-                                                     username, email, role, status
-                                              FROM users
-                                              ORDER BY user_id DESC";
+                                $users = $_SESSION['cache']['users'] ?? [];
 
-                                $users_run = mysqli_query($conn, $users_sql);
+                                while ($row = array_shift($users)) {
+                                    $user_id = htmlspecialchars($row['user_id']);
+                                    $full_name = htmlspecialchars($row['full_name']);
+                                    $username = htmlspecialchars($row['username']);
+                                    $email = htmlspecialchars($row['email']);
+                                    $role = htmlspecialchars($row['role']);
+                                    $status = htmlspecialchars($row['status']);
 
-                                if ($users_run && mysqli_num_rows($users_run) > 0):
+                                    if ($role === 'admin') {
+                                        $role_badge = "<span class='badge bg-primary'>Admin</span>";
+                                    } elseif ($role === 'faculty') {
+                                        $role_badge = "<span class='badge bg-success'>Faculty</span>";
+                                    } else {
+                                        $role_badge = "<span class='badge bg-secondary'>$role</span>";
+                                    }
 
-                                    while ($row = mysqli_fetch_assoc($users_run)):
-                                        $role = strtolower($row['role'] ?? '');
-                                        $status = strtolower($row['status'] ?? '');
-                                ?>
-
+                                    echo "
                                     <tr>
                                         <td>
-                                            <?= htmlspecialchars(
-                                                $row['full_name'] ?? '',
-                                                ENT_QUOTES,
-                                                'UTF-8'
-                                            ) ?>
+                                            <div class='fw-semibold'>$full_name</div>
                                         </td>
-
                                         <td>
-                                            <?= htmlspecialchars(
-                                                $row['username'] ?? '',
-                                                ENT_QUOTES,
-                                                'UTF-8'
-                                            ) ?>
+                                            <div class='fw-semibold'>$username</div>
                                         </td>
-
-                                        <td>
-                                            <?= htmlspecialchars(
-                                                $row['email'] ?? '',
-                                                ENT_QUOTES,
-                                                'UTF-8'
-                                            ) ?>
-                                        </td>
-
-                                        <td>
-                                            <?php if ($role === 'admin'): ?>
-                                                <span class="badge bg-primary">
-                                                    Admin
-                                                </span>
-                                            <?php elseif ($role === 'faculty'): ?>
-                                                <span class="badge bg-success">
-                                                    Faculty
-                                                </span>
-                                            <?php else: ?>
-                                                <span class="badge bg-secondary">
-                                                    <?= htmlspecialchars(
-                                                        $row['role'] ?? 'Unknown',
-                                                        ENT_QUOTES,
-                                                        'UTF-8'
-                                                    ) ?>
-                                                </span>
-                                            <?php endif; ?>
-                                        </td>
-
-                                        <td>
-                                            <?php if ($status === 'active'): ?>
-                                                <span class="badge bg-success">
-                                                    Active
-                                                </span>
-                                            <?php else: ?>
-                                                <span class="badge bg-secondary">
-                                                    <?= htmlspecialchars(
-                                                        $row['status'] ?? 'Unknown',
-                                                        ENT_QUOTES,
-                                                        'UTF-8'
-                                                    ) ?>
-                                                </span>
-                                            <?php endif; ?>
-                                        </td>
-                                    </tr>
-
-                                <?php
-                                    endwhile;
-                                else:
-                                ?>
+                                        <td>$email</td>
+                                        <td class='text-center'>$role_badge</td>
+                                        <td>$status</td>
+                                    </tr>";
+                                }
+                                if (empty($_SESSION['cache']['users'])) {
+                                    echo "
                                     <tr>
-                                        <td colspan="5"
-                                            class="text-center text-secondary py-4">
-                                            <i class="bi bi-people fs-3 d-block mb-2"></i>
+                                        <td colspan='5' class='text-center text-secondary py-4'>
+                                            <i class='bi bi-people fs-3 d-block mb-2'></i>
                                             No users found.
                                         </td>
-                                    </tr>
-                                <?php endif; ?>
-
+                                    </tr>";
+                                }
+                                ?>
                             </tbody>
                         </table>
-
                     </div>
                 </div>
-
             </div>
-
         </main>
     </div>
 </div>
 
+<?php include 'modals/addFacultyModal.php'; ?>
+<?php include 'includes/jquery_scripts.php'; ?>
+<script src="../assets/js/users.js"></script>
 <?php include 'includes/footer.php'; ?>

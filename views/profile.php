@@ -145,7 +145,7 @@ while ($row = array_shift($users)) {
                                         data-bs-toggle="modal"
                                         data-bs-target="#addFacultyModal">
                                     <i class="bi bi-person-plus me-2"></i>
-                                    Add Faculty Account
+                                    Add User Account
                                 </button>
                             <?php endif; ?>
 
