@@ -8,30 +8,45 @@ function navActive($page, $current_page) {
 }
 ?>
 
+
 <!-- Mobile Top Navbar -->
 <nav class="navbar bg-white border-bottom px-3 py-3 d-md-none">
     <div class="d-flex align-items-center gap-2">
-        <div class="bg-primary text-white rounded-3 p-2">
-            <i class="bi bi-layers-fill fs-5"></i>
+        <div class="rounded-3 p-2 d-flex align-items-center justify-content-center flex-shrink-0">
+            <img src="../assets/images/CTech Logo.png"
+                 alt="CTECH Logo"
+                 style="width: 45px; height: 45px; object-fit: contain;">
         </div>
+
         <div>
             <div class="fw-bold text-dark">CTECH</div>
             <div class="text-secondary small">DocuTrack</div>
         </div>
     </div>
-    <button class="btn btn-light border rounded-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" aria-controls="mobileSidebar" aria-label="Open navigation">
+
+    <button class="btn btn-light border rounded-3"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#mobileSidebar"
+            aria-controls="mobileSidebar"
+            aria-label="Open navigation">
         <i class="bi bi-list fs-4"></i>
     </button>
 </nav>
+
 
 <!-- Desktop Sidebar -->
 <aside class="d-none d-md-flex flex-column col-md-3 col-lg-2 bg-dark text-white vh-100 p-3 overflow-hidden sticky-top" style="top: 0;">
     <!-- Brand -->
     <a href="dashboard.php"
-       class="text-decoration-none text-white d-flex align-items-center gap-3 p-2 mb-4">
-        <div class="bg-primary rounded-3 p-3">
-            <i class="bi bi-layers-fill fs-4"></i>
+    class="text-decoration-none text-white d-flex align-items-center gap-3 p-2 mb-4">
+        <div class="rounded-3 p-2 flex-shrink-0">
+            <img src="../assets/images/CTech Logo.png"
+                class="img-fluid"
+                style="width: 45px; height: 45px; object-fit: contain;"
+                alt="CTECH Logo">
         </div>
+
         <div>
             <h5 class="fw-bold mb-0">CTECH</h5>
             <small class="text-white-50">DocuTrack System</small>
@@ -103,8 +118,11 @@ function navActive($page, $current_page) {
 <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
     <div class="offcanvas-header border-bottom border-secondary py-4">
         <div class="d-flex align-items-center gap-3">
-            <div class="bg-primary rounded-3 p-3">
-                <i class="bi bi-layers-fill fs-4"></i>
+            <div class="rounded-3 p-2">
+                <img src="../assets/images/CTech Logo.png"
+                class="img-fluid"
+                style="width: 50px; height: 50px; object-fit: contain;"
+                alt="CTECH Logo">
             </div>
             <div>
                 <h5 class="fw-bold mb-0" id="mobileSidebarLabel">CTECH</h5>

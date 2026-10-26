@@ -16,13 +16,12 @@ include 'includes/header.php';
          style="max-width: 950px; min-height: 540px;">
         <!-- Left Panel -->
         <div class="col-md-6 bg-primary text-white d-flex flex-column justify-content-center align-items-center text-center p-5">
-            <div class="bg-white bg-opacity-10 rounded-4 p-4 mb-4">
-                <i class="bi bi-folder2-open" style="font-size: 4rem;"></i>
+            <div class="rounded-4 p-4 mb-2">
+                <img src="../assets/images/CTech Logo.png" alt="">
             </div>
-            <h2 class="fw-bold mb-2">CTECH DocuTrack</h2>
-            <p class="text-white-50 mb-4">College of Technology</p>
+            <h2 class="fw-bold mb-1">CTECH DocuTrack</h2>
+            <p class="text-white-50 mb-4 fw-semibold">College of Technology</p>
             <div class="border-top border-white border-opacity-25 pt-4">
-                <h5 class="fw-semibold">Document Management System</h5>
                 <p class="small text-white-50 mb-0">
                     Organize, access, and manage your documents in one place.
                 </p>
