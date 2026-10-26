@@ -1,10 +1,14 @@
 <?php
-include 'includes/header.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 if (isset($_SESSION['user_id'])) {
     header("Location: dashboard.php");
     exit;
 }
+
+include 'includes/header.php';
 ?>
 
 <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center p-3">
