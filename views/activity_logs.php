@@ -1,4 +1,3 @@
-
 <?php
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -17,8 +16,6 @@ if (!isset($_SESSION['cache']) || !is_array($_SESSION['cache'])) {
     exit;
 }
 
-include 'includes/header.php';
-
 $user_id = (int) $_SESSION['user_id'];
 
 $users = $_SESSION['cache']['users'] ?? [];
@@ -31,8 +28,9 @@ foreach ($users as $row) {
     }
 }
 
-// Activity logs from session cache
 $activity_logs = $_SESSION['cache']['activity_logs'] ?? [];
+
+include 'includes/header.php';
 ?>
 
 <div class="container-fluid bg-light min-vh-100">
